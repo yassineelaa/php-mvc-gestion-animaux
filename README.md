@@ -72,11 +72,6 @@ L'application inclut des fonctionnalités de sécurité essentielles :
 
     Protection contre les attaques CSRF : Des mesures sont mises en place pour éviter les attaques par falsification de requêtes inter-sites.
 
-Notes supplémentaires
-
-    Les routes du projet peuvent être personnalisées via le fichier router.php.
-
-    Assurez-vous que toutes les modifications du modèle soient également répercutées dans la base de données et dans le fichier Model.php pour éviter toute incohérence.
 
 
     -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -154,8 +149,6 @@ The application includes essential security features:
     Prevention of SQL Injection and XSS: Input data is filtered to prevent database manipulation attempts.
 
     CSRF Protection: Measures are in place to avoid Cross-Site Request Forgery attacks.
-
-Additional Notes
 
     Routes for the project can be customized via the router.php file.
 
