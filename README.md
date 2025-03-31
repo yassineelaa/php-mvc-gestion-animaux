@@ -1,5 +1,5 @@
 # php-mvc-gestion-animaux
-Gestion des Animaux - Application PHP
+## Gestion des Animaux - Application PHP
 
 Ce projet est une application web en PHP permettant de gérer une base de données d'animaux. Il a été développé dans le cadre d’un projet universitaire avec l'architecture MVCR (Modèle, Vue, Contrôleur, Routeur) pour assurer une meilleure modularité, une maintenance facilitée et une évolutivité du système.
 Objectif
@@ -17,7 +17,7 @@ Fonctionnalités principales
 
     API : Récupération des données sur les animaux via une API.
 
-Prérequis
+## Prérequis
 
 Avant de démarrer, assurez-vous de disposer des éléments suivants :
 
@@ -27,8 +27,8 @@ Avant de démarrer, assurez-vous de disposer des éléments suivants :
 
     MySQL pour la gestion de la base de données.
 
-Installation
-1. Récupérer le projet
+## Installation
+#### 1. Récupérer le projet
 
 Clonez ce dépôt depuis GitHub sur votre machine locale :
 
@@ -38,7 +38,7 @@ Allez dans le répertoire du projet :
 
 cd nom_du_projet
 
-2. Configurer la connexion MySQL
+#### 2. Configurer la connexion MySQL
 
 Dans le fichier mysql_config.php, modifiez les paramètres suivants pour les adapter à votre configuration :
 
@@ -50,19 +50,8 @@ define('MYSQL_USER', 'votre_utilisateur');
 define('MYSQL_PASSWORD', 'votre_motdepasse'); 
 ?>
 
-3. Créer la table MySQL
 
-Créez la table dans votre base de données en exécutant le fichier SQL fourni dans le projet, avec la structure suivante :
-
-CREATE TABLE animaux (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    species VARCHAR(255) NOT NULL,
-    age INT NOT NULL,
-    imagePath VARCHAR(255) NOT NULL
-);
-
-4. Lancer le projet
+#### 3. Lancer le projet
 
 Une fois la configuration terminée, vous pouvez héberger et tester le projet sur votre serveur local ou sur un service d’hébergement comme XAMPP, WAMP ou un autre.
 API
@@ -111,7 +100,7 @@ Key Features
 
     API: Retrieve animal data via an API.
 
-Prerequisites
+## Prerequisites
 
 Before you begin, ensure you have the following:
 
@@ -121,8 +110,8 @@ Before you begin, ensure you have the following:
 
     MySQL for database management.
 
-Installation
-1. Clone the Project
+## Installation
+#### 1. Clone the Project
 
 Clone the repository from GitHub to your local machine:
 
@@ -132,7 +121,7 @@ Navigate to the project directory:
 
 cd project_name
 
-2. Configure MySQL Connection
+#### 2. Configure MySQL Connection
 
 Open the mysql_config.php file and modify the following settings with your configuration:
 
@@ -144,19 +133,8 @@ define('MYSQL_USER', 'your_username');
 define('MYSQL_PASSWORD', 'your_password'); 
 ?>
 
-3. Create the MySQL Table
 
-Create the table in your database by running the provided SQL file, using the following structure:
-
-CREATE TABLE animaux (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    species VARCHAR(255) NOT NULL,
-    age INT NOT NULL,
-    imagePath VARCHAR(255) NOT NULL
-);
-
-4. Run the Project
+#### 4. Run the Project
 
 Once the configuration is complete, deploy the project on your local server or a hosting platform such as XAMPP, WAMP, or another service.
 API
