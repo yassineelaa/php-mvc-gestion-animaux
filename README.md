@@ -1,6 +1,4 @@
-top ! voilà les **2 versions avec sommaire** (FR & EN) prêtes à coller dans ton README 👇
 
----
 
 # php-mvc-gestion-animaux
 
