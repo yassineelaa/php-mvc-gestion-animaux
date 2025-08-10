@@ -1,155 +1,219 @@
 # php-mvc-gestion-animaux
-## Gestion des Animaux - Application PHP
 
-Ce projet est une application web en PHP permettant de gérer une base de données d'animaux. Il a été développé dans le cadre d’un projet universitaire avec l'architecture MVCR (Modèle, Vue, Contrôleur, Routeur) pour assurer une meilleure modularité, une maintenance facilitée et une évolutivité du système.
-Objectif
+Application web **PHP (MVCR)** de **gestion d’animaux** avec **MySQL** et une **API JSON** minimale.
+Objectif : créer / lister / consulter / supprimer des animaux, afficher les pages HTML côté site, et exposer des données côté API.
 
-Ce site permet aux utilisateurs d’ajouter, modifier et supprimer des animaux dans une base de données. L'application offre aussi une API pour interagir avec les informations des animaux, en respectant des normes de sécurité comme la validation des fichiers et la protection contre les attaques courantes.
-Fonctionnalités principales
+---
 
-    Gestion des animaux : Ajouter, modifier et supprimer des animaux.
+## ✨ Fonctionnalités
 
-    Informations complètes sur les animaux : Nom, âge, espèce et chemin d'accès de l'image.
+* **CRUD Animaux**
 
-    Téléversement sécurisé d'images : Les utilisateurs peuvent uploader des images pour chaque animal avec une validation des types de fichiers (PNG, JPEG).
+  * Créer un animal (nom, espèce, âge, image facultative)
+  * Lister & consulter le détail
+  * Supprimer (⚠️ via lien GET dans cette version)
+  * *(Mise à jour non implémentée pour l’instant)*
+* **Upload d’images** (PNG/JPEG) avec validations de base
+* **API JSON** de lecture (liste + détail)
+* **Architecture MVCR** claire : Router → Controller → Model/Storage (PDO) → View
+* **Accès BDD sécurisé** : **PDO + requêtes préparées** (anti-injection SQL)
 
-    Sécurité renforcée : Protection contre les attaques telles que les injections SQL, XSS, et CSRF.
+---
 
-    API : Récupération des données sur les animaux via une API.
+## 🧱 Stack & prérequis
 
-## Prérequis
+* **PHP** ≥ 7.4
+* **MySQL** 5.7+ / 8.0
+* **Serveur web** (Apache/Nginx) ou serveur interne `php -S`
+* Aucune dépendance Composer obligatoire
 
-Avant de démarrer, assurez-vous de disposer des éléments suivants :
+---
 
-    Un serveur web fonctionnel comme Apache ou Nginx.
+## 📁 Structure du projet
 
-    PHP version 7.4 ou supérieure.
+```
+php-mvc-gestion-animaux/
+├─ site.php                  # Entrée du site (HTML)
+├─ api.php                   # Entrée API (JSON, lecture)
+├─ css/
+│  └─ style.css
+└─ src/
+   ├─ Router.php             # Routage (actions -> contrôleur)
+   ├─ control/
+   │  └─ Controller.php      # Logique métier (create/delete/list/view)
+   ├─ model/
+   │  ├─ Animal.php
+   │  ├─ AnimalBuilder.php   # Validation des champs (name/species/age)
+   │  ├─ AnimalStorage.php   # Interface de stockage
+   │  ├─ AnimalStorageMySQL.php    # Implémentation MySQL (PDO préparé)
+   │  ├─ AnimalStorageSession.php  # Stockage en session (ex. maquette)
+   │  └─ AnimalStorageStub.php     # Stub / squelette
+   └─ view/
+      ├─ View.php            # Vues HTML
+      └─ JSONView.php        # Sorties JSON (API)
+```
 
-    MySQL pour la gestion de la base de données.
+---
 
-## Installation
-#### 1. Récupérer le projet
+## 🧠 Architecture (MVCR)
 
-Clonez ce dépôt depuis GitHub sur votre machine locale :
+* **Router** : lit `$_GET['action']`, appelle la bonne méthode du **Controller**.
+* **Controller** : récupère/valide les entrées (via **AnimalBuilder**), appelle le **Storage**.
+* **Model/Storage** : requêtes **PDO préparées** vers MySQL.
+* **View** : génère l’HTML (échappement `htmlspecialchars`).
 
-git clone https://github.com/tonutilisateur/nom_du_projet.git
+Schéma rapide :
 
-Allez dans le répertoire du projet :
+```
+Request → site.php?action=... → Router → Controller → AnimalStorageMySQL (PDO) → View (HTML)
+                                                     └→ JSONView (API)
+```
 
-cd nom_du_projet
+---
 
-#### 2. Configurer la connexion MySQL
+## 🗃️ Base de données
 
-Dans le fichier mysql_config.php, modifiez les paramètres suivants pour les adapter à votre configuration :
+Créer la base et la table `animals` :
 
+```sql
+CREATE TABLE animals (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  species VARCHAR(255) NOT NULL,
+  age INT NOT NULL,
+  image VARCHAR(255) NULL,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+```
+
+---
+
+## ⚙️ Configuration
+
+Le projet attend une configuration **PDO** incluse par `site.php` et `api.php`.
+
+**Option A — Mettre la config dans le projet**
+
+1. Crée `config/mysql_config.php` avec :
+
+```php
 <?php
-define('MYSQL_HOST', 'mysql:host=votre_hote_mysql;'); 
-define('MYSQL_PORT', 'port=votre_port;'); 
-define('MYSQL_DB', 'dbname=votre_db'); 
-define('MYSQL_USER', 'votre_utilisateur');  
-define('MYSQL_PASSWORD', 'votre_motdepasse'); 
-?>
+$dsn  = 'mysql:host=localhost;dbname=zoo;charset=utf8mb4';
+$user = 'root';
+$pass = '';
 
+$pdo = new PDO($dsn, $user, $pass, [
+  PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+  PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+]);
+```
 
-#### 3. Lancer le projet
+2. Dans `site.php` et `api.php`, inclure :
 
-Une fois la configuration terminée, vous pouvez héberger et tester le projet sur votre serveur local ou sur un service d’hébergement comme XAMPP, WAMP ou un autre.
-API
+```php
+require_once __DIR__ . '/config/mysql_config.php';
+```
 
-Les appels API doivent être effectués avec les paramètres suivants :
+**Option B — Chemin externe (privé)**
+Place le fichier de config en dehors du repo (ex. répertoire privé) et ajuste le `require_once` en conséquence.
+💡 Évite de versionner des identifiants (ajoute la config au `.gitignore`).
 
-    api.php?collection=animaux : pour récupérer la liste complète des animaux avec seulement le nom et l'ID.
+---
 
-    api.php?collection=animaux&id=1 : pour obtenir toutes les informations d'un animal avec l'ID spécifié.
+## 🚀 Lancer en local
 
-Sécurité
+1. Crée la table (script SQL ci-dessus)
+2. Configure `config/mysql_config.php`
+3. Lance un serveur :
 
-L'application inclut des fonctionnalités de sécurité essentielles :
+```bash
+php -S localhost:8000
+```
 
-    Validation des fichiers uploadés : Seuls les fichiers avec des extensions sécurisées (PNG, JPEG) peuvent être téléchargés.
+4. Ouvre :
 
-    Prévention des injections SQL et XSS : Les données d'entrée sont filtrées pour empêcher toute tentative de manipulation de la base de données.
+* **Site** : `http://localhost:8000/site.php`
+* **Liste** : `http://localhost:8000/site.php?action=list`
 
-    Protection contre les attaques CSRF : Des mesures sont mises en place pour éviter les attaques par falsification de requêtes inter-sites.
+---
 
+## 🧭 Routes (site)
 
+* **Liste** : `site.php?action=list`
+* **Détail** : `site.php?action=view&id={ID}`
+* **Formulaire de création** : `site.php?action=new`
+* **Création (POST)** : `site.php?action=save`
+* **Suppression** : `site.php?action=delete&id={ID}` *(⚠️ via GET dans cette version)*
 
-    -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+> ✅ Recommandation : passer la **suppression en POST** et ajouter une confirmation côté vue.
 
+---
 
-Animal Management - PHP Application
+## 🔌 API JSON
 
-This project is a simple web application in PHP that allows you to manage an animal database. It was developed as part of a university project using the MVCR (Model, View, Controller, Router) architecture to ensure modularity, maintainability, and scalability.
-Purpose
+Entrée : **`api.php`** (retours JSON)
 
-The website allows users to add, modify, and delete animals in a database. The application also provides an API to interact with the animal information while maintaining high security standards, such as file validation and protection against common attacks.
-Key Features
+* **Liste des animaux**
+  `GET /api.php?collection=animaux`
+  **Réponse** : tableau JSON d’animaux
 
-    Animal Management: Add, modify, and delete animals.
+* **Détail d’un animal**
+  `GET /api.php?collection=animaux&id={ID}`
+  **Réponse** : objet JSON (ou `404` si introuvable)
 
-    Animal Information: Store and display information about animals, including name, age, species, and image path.
+> L’API actuelle est **lecture seule**. Les routes **POST/PUT/DELETE** peuvent être ajoutées facilement (voir *Roadmap*).
 
-    Secure Image Upload: Users can upload images for each animal, with file validation (PNG, JPEG).
+---
 
-    Enhanced Security: Protection against attacks like SQL injection, XSS, and CSRF.
+## 🔐 Sécurité
 
-    API: Retrieve animal data via an API.
+* **Anti-injection SQL** : **PDO + requêtes préparées** (dans `AnimalStorageMySQL.php`)
+* **Anti-XSS (sorties)** : `htmlspecialchars(...)` dans les vues
+* **Validation serveur** : `AnimalBuilder` (obligatoires / types / formats)
 
-## Prerequisites
+**À améliorer (Roadmap)**
 
-Before you begin, ensure you have the following:
+* Suppression via **POST** (au lieu de GET)
+* **CSRF token** pour les formulaires POST
+* Pagination / tri côté SQL pour les grandes listes
 
-    A functional web server such as Apache or Nginx.
+---
 
-    PHP version 7.4 or newer.
+## 🧭 Roadmap
 
-    MySQL for database management.
+* [ ] Implémenter **Update** (édition) + `update()` côté storage
+* [ ] Passer **delete** en **POST** + confirm
+* [ ] **CSRF token** sur tous les formulaires POST
+* [ ] **Pagination / tri** SQL dans la liste
+* [ ] Validation upload renforcée (taille max, `mime_content_type`, nom de fichier unique)
+* [ ] Rôles (admin/lecteur) si besoin de droits
 
-## Installation
-#### 1. Clone the Project
+---
 
-Clone the repository from GitHub to your local machine:
+## 🧪 Tests rapides
 
-git clone https://github.com/yourusername/project_name.git
+* Créer 2–3 animaux (dont un avec image)
+* Vérifier liste / détail / suppression
+* Tester l’API dans le navigateur :
 
-Navigate to the project directory:
+  * `/api.php?collection=animaux`
+  * `/api.php?collection=animaux&id=1`
 
-cd project_name
+---
 
-#### 2. Configure MySQL Connection
+## 🖼️ Captures (optionnel)
 
-Open the mysql_config.php file and modify the following settings with your configuration:
+*(Ajouter ici des screenshots : liste, formulaire de création, appel API JSON.)*
 
-<?php
-define('MYSQL_HOST', 'mysql:host=your_mysql_host;'); 
-define('MYSQL_PORT', 'port=your_port;'); 
-define('MYSQL_DB', 'dbname=your_db'); 
-define('MYSQL_USER', 'your_username');  
-define('MYSQL_PASSWORD', 'your_password'); 
-?>
+---
 
+## 📄 Licence
 
-#### 4. Run the Project
+Projet académique — libre d’usage et d’amélioration à des fins pédagogiques.
 
-Once the configuration is complete, deploy the project on your local server or a hosting platform such as XAMPP, WAMP, or another service.
-API
+---
 
-API calls must be made with the following parameters:
+## 👤 Auteur
 
-    api.php?collection=animaux: Retrieve the full list of animals with only name and ID.
-
-    api.php?collection=animaux&id=1: Retrieve all the information of an animal with a specified ID.
-
-Security
-
-The application includes essential security features:
-
-    File Upload Validation: Only secure file extensions (PNG, JPEG) can be uploaded.
-
-    Prevention of SQL Injection and XSS: Input data is filtered to prevent database manipulation attempts.
-
-    CSRF Protection: Measures are in place to avoid Cross-Site Request Forgery attacks.
-
-    Routes for the project can be customized via the router.php file.
-
-    Make sure any modifications to the model are reflected in the database and the Model.php file to avoid inconsistencies.
+**Yassine EL-AASMI**
+GitHub : [@yassineelaa](https://github.com/yassineelaa)
