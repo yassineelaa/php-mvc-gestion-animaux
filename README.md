@@ -192,6 +192,207 @@ Entrée : **`api.php`** (retours JSON)
 
 Projet académique — libre d’usage et d’amélioration à des fins pédagogiques.
 
+Voici une **version anglaise** prête à coller sous ton README 👇
+
+---
+
+## 🇬🇧 English Version — php-mvc-gestion-animaux
+
+Web application in **PHP (MVCR)** for **animal management** with **MySQL** and a minimal **JSON API**.
+Goal: create / list / view / delete animals, render HTML pages for the site, and expose read-only data via an API.
+
+---
+
+## ✨ Features
+
+* **Animals CRUD**
+
+  * Create an animal (name, species, age, optional image)
+  * List & view details
+  * Delete
+* **Image upload** (PNG/JPEG) with basic validations
+* **Read-only JSON API** (list + detail)
+* **Clear MVCR architecture**: Router → Controller → Model/Storage (PDO) → View
+* **Secure DB access**: **PDO + prepared statements** (SQL injection protection)
+
+---
+
+## 🧱 Stack & Prerequisites
+
+* **PHP** ≥ 7.4
+* **MySQL** 5.7+ / 8.0
+* **Web server** (Apache/Nginx) or PHP built-in server `php -S`
+* No mandatory Composer dependencies
+
+---
+
+## 📁 Project Structure
+
+```
+php-mvc-gestion-animaux/
+├─ site.php                  # Site entrypoint (HTML)
+├─ api.php                   # API entrypoint (JSON, read-only)
+├─ css/
+│  └─ style.css
+└─ src/
+   ├─ Router.php             # Routing (actions -> controller)
+   ├─ control/
+   │  └─ Controller.php      # Business logic (create/delete/list/view)
+   ├─ model/
+   │  ├─ Animal.php
+   │  ├─ AnimalBuilder.php   # Field validation (name/species/age)
+   │  ├─ AnimalStorage.php   # Storage interface
+   │  ├─ AnimalStorageMySQL.php    # MySQL implementation (prepared PDO)
+   │  ├─ AnimalStorageSession.php  # Session storage (e.g., prototype)
+   │  └─ AnimalStorageStub.php     # Stub / skeleton
+   └─ view/
+      ├─ View.php            # HTML views
+      └─ JSONView.php        # JSON outputs (API)
+```
+
+---
+
+## 🧠 Architecture (MVCR)
+
+* **Router**: reads `$_GET['action']`, calls the proper **Controller** method.
+* **Controller**: collects/validates inputs (via **AnimalBuilder**), calls the **Storage**.
+* **Model/Storage**: **prepared PDO** queries to MySQL.
+* **View**: generates HTML (with `htmlspecialchars` escaping).
+
+Quick sketch:
+
+```
+Request → site.php?action=... → Router → Controller → AnimalStorageMySQL (PDO) → View (HTML)
+                                                     └→ JSONView (API)
+```
+
+---
+
+## 🗃️ Database
+
+Create the database and the `animals` table:
+
+```sql
+CREATE TABLE animals (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  species VARCHAR(255) NOT NULL,
+  age INT NOT NULL,
+  image VARCHAR(255) NULL,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+```
+
+---
+
+## ⚙️ Configuration
+
+The project expects a **PDO** configuration required by both `site.php` and `api.php`.
+
+**Option A — Put the config inside the project**
+
+1. Create `config/mysql_config.php`:
+
+```php
+<?php
+$dsn  = 'mysql:host=localhost;dbname=zoo;charset=utf8mb4';
+$user = 'root';
+$pass = '';
+
+$pdo = new PDO($dsn, $user, $pass, [
+  PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+  PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+]);
+```
+
+2. In `site.php` and `api.php`, include it:
+
+```php
+require_once __DIR__ . '/config/mysql_config.php';
+```
+
+**Option B — External (private) path**
+Place the config file outside the repo (e.g., a private directory) and adjust `require_once` accordingly.
+💡 Avoid committing credentials (add the config to `.gitignore`).
+
+---
+
+## 🚀 Run Locally
+
+1. Create the table (SQL script above)
+2. Configure `config/mysql_config.php`
+3. Start a server:
+
+```bash
+php -S localhost:8000
+```
+
+4. Open:
+
+* **Site**: `http://localhost:8000/site.php`
+* **List**: `http://localhost:8000/site.php?action=list`
+
+---
+
+## 🧭 Routes (site)
+
+* **List**: `site.php?action=list`
+* **Detail**: `site.php?action=view&id={ID}`
+* **Create form**: `site.php?action=new`
+* **Create (POST)**: `site.php?action=save`
+* **Delete**: `site.php?action=delete&id={ID}`
+
+---
+
+## 🔌 JSON API
+
+Entrypoint: **`api.php`** (JSON responses)
+
+* **Animals list**
+  `GET /api.php?collection=animaux`
+  **Response**: JSON array of animals
+
+* **Animal detail**
+  `GET /api.php?collection=animaux&id={ID}`
+  **Response**: JSON object (or `404` if not found)
+
+> The current API is **read-only**. **POST/PUT/DELETE** routes can be added easily (see *Roadmap*).
+
+*(Note: the collection parameter currently uses the French word `animaux` to match the implementation.)*
+
+---
+
+## 🔐 Security
+
+* **SQL injection protection**: **PDO + prepared statements** (see `AnimalStorageMySQL.php`)
+* **Anti-XSS (outputs)**: `htmlspecialchars(...)` in views
+* **Server-side validation**: `AnimalBuilder` (required fields / types / formats)
+
+---
+
+## 🧪 Quick Tests
+
+* Create 2–3 animals (include one with an image)
+* Check list / detail / deletion
+* Test the API in the browser:
+
+  * `/api.php?collection=animaux`
+  * `/api.php?collection=animaux&id=1`
+
+---
+
+## 📄 License
+
+Academic project — free to use and improve for educational purposes.
+
+---
+
+## 👤 Author
+
+**Yassine EL-AASMI**
+GitHub: [@yassineelaa](https://github.com/yassineelaa)
+
+
 ---
 
 ## 👤 Auteur
