@@ -1,17 +1,44 @@
+top ! voilà les **2 versions avec sommaire** (FR & EN) prêtes à coller dans ton README 👇
+
+---
+
 # php-mvc-gestion-animaux
+
+## 🇫🇷 Version française
+
+### Sommaire
+
+* [Présentation](#fr-presentation)
+* [✨ Fonctionnalités](#fr-fonctionnalites)
+* [🧱 Stack & prérequis](#fr-stack)
+* [📁 Structure du projet](#fr-structure)
+* [🧠 Architecture (MVCR)](#fr-architecture)
+* [🗃️ Base de données](#fr-bdd)
+* [⚙️ Configuration](#fr-config)
+* [🚀 Lancer en local](#fr-run)
+* [🧭 Routes (site)](#fr-routes)
+* [🔌 API JSON](#fr-api)
+* [🔐 Sécurité](#fr-securite)
+* [🧪 Tests rapides](#fr-tests)
+* [📄 Licence](#fr-licence)
+* [👤 Auteur](#fr-auteur)
+
+---
+
+### <a id="fr-presentation"></a>Présentation
 
 Application web **PHP (MVCR)** de **gestion d’animaux** avec **MySQL** et une **API JSON** minimale.
 Objectif : créer / lister / consulter / supprimer des animaux, afficher les pages HTML côté site, et exposer des données côté API.
 
 ---
 
-## ✨ Fonctionnalités
+### <a id="fr-fonctionnalites"></a>✨ Fonctionnalités
 
 * **CRUD Animaux**
 
   * Créer un animal (nom, espèce, âge, image facultative)
   * Lister & consulter le détail
-  * Supprimer 
+  * Supprimer
 * **Upload d’images** (PNG/JPEG) avec validations de base
 * **API JSON** de lecture (liste + détail)
 * **Architecture MVCR** claire : Router → Controller → Model/Storage (PDO) → View
@@ -19,7 +46,7 @@ Objectif : créer / lister / consulter / supprimer des animaux, afficher les pag
 
 ---
 
-## 🧱 Stack & prérequis
+### <a id="fr-stack"></a>🧱 Stack & prérequis
 
 * **PHP** ≥ 7.4
 * **MySQL** 5.7+ / 8.0
@@ -28,7 +55,7 @@ Objectif : créer / lister / consulter / supprimer des animaux, afficher les pag
 
 ---
 
-## 📁 Structure du projet
+### <a id="fr-structure"></a>📁 Structure du projet
 
 ```
 php-mvc-gestion-animaux/
@@ -54,7 +81,7 @@ php-mvc-gestion-animaux/
 
 ---
 
-## 🧠 Architecture (MVCR)
+### <a id="fr-architecture"></a>🧠 Architecture (MVCR)
 
 * **Router** : lit `$_GET['action']`, appelle la bonne méthode du **Controller**.
 * **Controller** : récupère/valide les entrées (via **AnimalBuilder**), appelle le **Storage**.
@@ -70,7 +97,7 @@ Request → site.php?action=... → Router → Controller → AnimalStorageMySQL
 
 ---
 
-## 🗃️ Base de données
+### <a id="fr-bdd"></a>🗃️ Base de données
 
 Créer la base et la table `animals` :
 
@@ -87,7 +114,7 @@ CREATE TABLE animals (
 
 ---
 
-## ⚙️ Configuration
+### <a id="fr-config"></a>⚙️ Configuration
 
 Le projet attend une configuration **PDO** incluse par `site.php` et `api.php`.
 
@@ -119,7 +146,7 @@ Place le fichier de config en dehors du repo (ex. répertoire privé) et ajuste 
 
 ---
 
-## 🚀 Lancer en local
+### <a id="fr-run"></a>🚀 Lancer en local
 
 1. Crée la table (script SQL ci-dessus)
 2. Configure `config/mysql_config.php`
@@ -136,18 +163,17 @@ php -S localhost:8000
 
 ---
 
-## 🧭 Routes (site)
+### <a id="fr-routes"></a>🧭 Routes (site)
 
 * **Liste** : `site.php?action=list`
 * **Détail** : `site.php?action=view&id={ID}`
 * **Formulaire de création** : `site.php?action=new`
 * **Création (POST)** : `site.php?action=save`
-* **Suppression** : `site.php?action=delete&id={ID}` 
-
+* **Suppression** : `site.php?action=delete&id={ID}`
 
 ---
 
-## 🔌 API JSON
+### <a id="fr-api"></a>🔌 API JSON
 
 Entrée : **`api.php`** (retours JSON)
 
@@ -163,20 +189,15 @@ Entrée : **`api.php`** (retours JSON)
 
 ---
 
-## 🔐 Sécurité
+### <a id="fr-securite"></a>🔐 Sécurité
 
 * **Anti-injection SQL** : **PDO + requêtes préparées** (dans `AnimalStorageMySQL.php`)
 * **Anti-XSS (sorties)** : `htmlspecialchars(...)` dans les vues
 * **Validation serveur** : `AnimalBuilder` (obligatoires / types / formats)
 
-
-
 ---
 
-
-
-
-## 🧪 Tests rapides
+### <a id="fr-tests"></a>🧪 Tests rapides
 
 * Créer 2–3 animaux (dont un avec image)
 * Vérifier liste / détail / suppression
@@ -187,23 +208,48 @@ Entrée : **`api.php`** (retours JSON)
 
 ---
 
-
-## 📄 Licence
+### <a id="fr-licence"></a>📄 Licence
 
 Projet académique — libre d’usage et d’amélioration à des fins pédagogiques.
 
-Voici une **version anglaise** prête à coller sous ton README 👇
+---
+
+### <a id="fr-auteur"></a>👤 Auteur
+
+**Yassine EL-AASMI**
+GitHub : [@yassineelaa](https://github.com/yassineelaa)
 
 ---
 
-## 🇬🇧 English Version — php-mvc-gestion-animaux
+## 🇬🇧 English version
+
+### Table of Contents
+
+* [Overview](#en-overview)
+* [✨ Features](#en-features)
+* [🧱 Stack & Prerequisites](#en-stack)
+* [📁 Project Structure](#en-structure)
+* [🧠 Architecture (MVCR)](#en-architecture)
+* [🗃️ Database](#en-db)
+* [⚙️ Configuration](#en-config)
+* [🚀 Run Locally](#en-run)
+* [🧭 Routes (site)](#en-routes)
+* [🔌 JSON API](#en-api)
+* [🔐 Security](#en-security)
+* [🧪 Quick Tests](#en-tests)
+* [📄 License](#en-license)
+* [👤 Author](#en-author)
+
+---
+
+### <a id="en-overview"></a>Overview
 
 Web application in **PHP (MVCR)** for **animal management** with **MySQL** and a minimal **JSON API**.
 Goal: create / list / view / delete animals, render HTML pages for the site, and expose read-only data via an API.
 
 ---
 
-## ✨ Features
+### <a id="en-features"></a>✨ Features
 
 * **Animals CRUD**
 
@@ -217,7 +263,7 @@ Goal: create / list / view / delete animals, render HTML pages for the site, and
 
 ---
 
-## 🧱 Stack & Prerequisites
+### <a id="en-stack"></a>🧱 Stack & Prerequisites
 
 * **PHP** ≥ 7.4
 * **MySQL** 5.7+ / 8.0
@@ -226,7 +272,7 @@ Goal: create / list / view / delete animals, render HTML pages for the site, and
 
 ---
 
-## 📁 Project Structure
+### <a id="en-structure"></a>📁 Project Structure
 
 ```
 php-mvc-gestion-animaux/
@@ -252,7 +298,7 @@ php-mvc-gestion-animaux/
 
 ---
 
-## 🧠 Architecture (MVCR)
+### <a id="en-architecture"></a>🧠 Architecture (MVCR)
 
 * **Router**: reads `$_GET['action']`, calls the proper **Controller** method.
 * **Controller**: collects/validates inputs (via **AnimalBuilder**), calls the **Storage**.
@@ -268,7 +314,7 @@ Request → site.php?action=... → Router → Controller → AnimalStorageMySQL
 
 ---
 
-## 🗃️ Database
+### <a id="en-db"></a>🗃️ Database
 
 Create the database and the `animals` table:
 
@@ -285,7 +331,7 @@ CREATE TABLE animals (
 
 ---
 
-## ⚙️ Configuration
+### <a id="en-config"></a>⚙️ Configuration
 
 The project expects a **PDO** configuration required by both `site.php` and `api.php`.
 
@@ -317,7 +363,7 @@ Place the config file outside the repo (e.g., a private directory) and adjust `r
 
 ---
 
-## 🚀 Run Locally
+### <a id="en-run"></a>🚀 Run Locally
 
 1. Create the table (SQL script above)
 2. Configure `config/mysql_config.php`
@@ -334,7 +380,7 @@ php -S localhost:8000
 
 ---
 
-## 🧭 Routes (site)
+### <a id="en-routes"></a>🧭 Routes (site)
 
 * **List**: `site.php?action=list`
 * **Detail**: `site.php?action=view&id={ID}`
@@ -344,7 +390,7 @@ php -S localhost:8000
 
 ---
 
-## 🔌 JSON API
+### <a id="en-api"></a>🔌 JSON API
 
 Entrypoint: **`api.php`** (JSON responses)
 
@@ -357,12 +403,11 @@ Entrypoint: **`api.php`** (JSON responses)
   **Response**: JSON object (or `404` if not found)
 
 > The current API is **read-only**. **POST/PUT/DELETE** routes can be added easily (see *Roadmap*).
-
-*(Note: the collection parameter currently uses the French word `animaux` to match the implementation.)*
+> *(Note: the collection parameter intentionally uses the French word `animaux` to match the implementation.)*
 
 ---
 
-## 🔐 Security
+### <a id="en-security"></a>🔐 Security
 
 * **SQL injection protection**: **PDO + prepared statements** (see `AnimalStorageMySQL.php`)
 * **Anti-XSS (outputs)**: `htmlspecialchars(...)` in views
@@ -370,7 +415,7 @@ Entrypoint: **`api.php`** (JSON responses)
 
 ---
 
-## 🧪 Quick Tests
+### <a id="en-tests"></a>🧪 Quick Tests
 
 * Create 2–3 animals (include one with an image)
 * Check list / detail / deletion
@@ -381,21 +426,17 @@ Entrypoint: **`api.php`** (JSON responses)
 
 ---
 
-## 📄 License
+### <a id="en-license"></a>📄 License
 
 Academic project — free to use and improve for educational purposes.
 
 ---
 
-## 👤 Author
+### <a id="en-author"></a>👤 Author
 
 **Yassine EL-AASMI**
 GitHub: [@yassineelaa](https://github.com/yassineelaa)
 
-
 ---
 
-## 👤 Auteur
-
-**Yassine EL-AASMI**
-GitHub : [@yassineelaa](https://github.com/yassineelaa)
+si tu veux, je peux aussi te générer un **README.md complet** avec les deux versions (FR/EN) déjà mises en forme et prêt à pousser sur GitHub.
