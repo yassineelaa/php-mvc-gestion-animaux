@@ -11,8 +11,7 @@ Objectif : créer / lister / consulter / supprimer des animaux, afficher les pag
 
   * Créer un animal (nom, espèce, âge, image facultative)
   * Lister & consulter le détail
-  * Supprimer (⚠️ via lien GET dans cette version)
-  * *(Mise à jour non implémentée pour l’instant)*
+  * Supprimer 
 * **Upload d’images** (PNG/JPEG) avec validations de base
 * **API JSON** de lecture (liste + détail)
 * **Architecture MVCR** claire : Router → Controller → Model/Storage (PDO) → View
@@ -143,9 +142,8 @@ php -S localhost:8000
 * **Détail** : `site.php?action=view&id={ID}`
 * **Formulaire de création** : `site.php?action=new`
 * **Création (POST)** : `site.php?action=save`
-* **Suppression** : `site.php?action=delete&id={ID}` *(⚠️ via GET dans cette version)*
+* **Suppression** : `site.php?action=delete&id={ID}` 
 
-> ✅ Recommandation : passer la **suppression en POST** et ajouter une confirmation côté vue.
 
 ---
 
@@ -171,24 +169,12 @@ Entrée : **`api.php`** (retours JSON)
 * **Anti-XSS (sorties)** : `htmlspecialchars(...)` dans les vues
 * **Validation serveur** : `AnimalBuilder` (obligatoires / types / formats)
 
-**À améliorer (Roadmap)**
 
-* Suppression via **POST** (au lieu de GET)
-* **CSRF token** pour les formulaires POST
-* Pagination / tri côté SQL pour les grandes listes
 
 ---
 
-## 🧭 Roadmap
 
-* [ ] Implémenter **Update** (édition) + `update()` côté storage
-* [ ] Passer **delete** en **POST** + confirm
-* [ ] **CSRF token** sur tous les formulaires POST
-* [ ] **Pagination / tri** SQL dans la liste
-* [ ] Validation upload renforcée (taille max, `mime_content_type`, nom de fichier unique)
-* [ ] Rôles (admin/lecteur) si besoin de droits
 
----
 
 ## 🧪 Tests rapides
 
@@ -201,11 +187,6 @@ Entrée : **`api.php`** (retours JSON)
 
 ---
 
-## 🖼️ Captures (optionnel)
-
-*(Ajouter ici des screenshots : liste, formulaire de création, appel API JSON.)*
-
----
 
 ## 📄 Licence
 
