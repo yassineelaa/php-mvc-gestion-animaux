@@ -437,4 +437,3 @@ GitHub: [@yassineelaa](https://github.com/yassineelaa)
 
 ---
 
-si tu veux, je peux aussi te générer un **README.md complet** avec les deux versions (FR/EN) déjà mises en forme et prêt à pousser sur GitHub.
